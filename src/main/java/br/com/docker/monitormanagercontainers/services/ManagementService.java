@@ -3,15 +3,12 @@ package br.com.docker.monitormanagercontainers.services;
 import br.com.docker.monitormanagercontainers.clients.DockerEngineApiClient;
 import br.com.docker.monitormanagercontainers.clients.dtos.ContainersDTO;
 import br.com.docker.monitormanagercontainers.clients.dtos.ImagesDTO;
-import br.com.docker.monitormanagercontainers.data.models.Container;
-import br.com.docker.monitormanagercontainers.data.models.Image;
 import br.com.docker.monitormanagercontainers.dto.response.ContainerResponseDTO;
 import br.com.docker.monitormanagercontainers.dto.response.ImagesResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
