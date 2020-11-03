@@ -2,6 +2,8 @@ package br.com.docker.monitormanagercontainers.controllers;
 
 import br.com.docker.monitormanagercontainers.data.models.Container;
 import br.com.docker.monitormanagercontainers.data.models.Image;
+import br.com.docker.monitormanagercontainers.dto.response.ContainerResponseDTO;
+import br.com.docker.monitormanagercontainers.dto.response.ImagesResponseDTO;
 import br.com.docker.monitormanagercontainers.services.ManagementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +30,12 @@ public class ManagementController {
     }
 
     @GetMapping("/containers")
-    public ResponseEntity<List<Container>> getContainers(){
+    public ResponseEntity<List<ContainerResponseDTO>> getContainers(){
        return ResponseEntity.ok(managementService.getContainers());
     }
 
     @GetMapping("/images")
-    public ResponseEntity<List<Image>> getImages(){
+    public ResponseEntity<List<ImagesResponseDTO>> getImages(){
         return ResponseEntity.ok(managementService.getImages());
     }
 

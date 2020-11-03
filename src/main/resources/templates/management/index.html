@@ -74,7 +74,7 @@ $(document).ready(function(){
                 url: '/monitoring-managment-containers/management/containers/' + bId,
                 type: 'DELETE',
                 success: function(result){
-                    alert('Image deleted successfully');
+                    alert('Container deleted successfully');
                     document.getElementById("table-container-content").removeChild(document.getElementById(data[i].id));
                 }
             });

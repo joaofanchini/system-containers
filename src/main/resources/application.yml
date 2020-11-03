@@ -14,3 +14,7 @@ mongodb:
   username: username
   password: password
 
+endpoints:
+  docker-engine-api:
+    base-url: http://localhost:2375/
+
