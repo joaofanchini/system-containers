@@ -1,5 +1,6 @@
 package br.com.docker.monitormanagercontainers.controllers;
 
+import br.com.docker.monitormanagercontainers.clients.dtos.CreateContainerDTO;
 import br.com.docker.monitormanagercontainers.dto.response.ContainerResponseDTO;
 import br.com.docker.monitormanagercontainers.dto.response.ImagesResponseDTO;
 import br.com.docker.monitormanagercontainers.services.ManagementService;
@@ -7,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -24,7 +22,7 @@ public class ManagementController {
 
     @GetMapping
     public ModelAndView getManagement(){
-        return  new ModelAndView("/management/index");
+        return new ModelAndView("/management/index");
     }
 
     @GetMapping("/containers")
@@ -35,6 +33,13 @@ public class ManagementController {
     @GetMapping("/images")
     public ResponseEntity<List<ImagesResponseDTO>> getImages(){
         return ResponseEntity.ok(managementService.getImages());
+    }
+
+    @PostMapping("/create-container")
+    public ResponseEntity createContainer(@RequestBody CreateContainerDTO createContainerDTO,
+                                          @RequestParam("name-image") String nameImage){
+        managementService.createContainer(nameImage, createContainerDTO);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/images/{id-image}")
