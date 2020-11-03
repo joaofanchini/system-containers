@@ -1,8 +1,205 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<div th:replace="fragments/base-header.html :: header"></div>
+<header th:fragment="header">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+</header>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $("#btnDeleteAll").click(function(event){
+    event.preventDefault();
+    const containerContent = document.getElementById("table-container-content");
+    const imageContent = document.getElementById("table-images-content");
+
+    let containerFlag = document.getElementById('pills-home-tab');
+    let imageFlag = document.getElementById('pills-profile-tab');
+
+    if(containerFlag.classList.contains('active')){
+      while (containerContent.firstChild) {
+        let trId = containerContent.lastChild.id;
+        $.ajax({
+                url: '/monitoring-managment-containers/management/containers/' + trId,
+                type: 'DELETE',
+                success: function(result){
+                    console.log('Image deleted successfully:',trId);
+
+                }
+        });
+        containerContent.removeChild(containerContent.lastChild);
+      }
+    } else if(imageFlag.classList.contains('active')){
+      while (imageContent.firstChild) {
+        let trId = imageContent.lastChild.id;
+        $.ajax({
+                url: '/monitoring-managment-containers/management/images/' + trId,
+                type: 'DELETE',
+                success: function(result){
+                    console.log('Image deleted successfully:',trId);
+
+                }
+        });
+        imageContent.removeChild(imageContent.lastChild);
+      }
+    }
+  });
+
+  $("#pills-home-tab").click(function(){
+    $.get("/monitoring-managment-containers/management/containers", function(data, status){
+      console.log(data);
+      const myNode = document.getElementById("table-container-content");
+      while (myNode.firstChild) {
+        myNode.removeChild(myNode.lastChild);
+      }
+      $.each(data, function(i){
+        var newRow = document.createElement("tr");
+        var newCellId = document.createElement("td");
+        var newCellName = document.createElement("td");
+        var newCellAction = document.createElement("td");
+        var newButtonDelete = document.createElement("button")
+
+        newCellId.innerHTML = data[i].id;
+        newCellName.innerHTML = data[i].name;
+
+        newButtonDelete.classList.add('btn','btn-danger')
+        newButtonDelete.innerHTML = 'Delete'
+        newRow.id = data[i].id;
+
+        newButtonDelete.onclick = function(event){
+            event.preventDefault();
+            let bId = data[i].id;
+            $.ajax({
+                url: '/monitoring-managment-containers/management/containers/' + bId,
+                type: 'DELETE',
+                success: function(result){
+                    alert('Image deleted successfully');
+                    document.getElementById("table-container-content").removeChild(document.getElementById(data[i].id));
+                }
+            });
+        }
+
+        newRow.append(newCellId)
+        newRow.append(newCellName)
+        newCellAction.append(newButtonDelete)
+        newRow.append(newCellAction)
+
+        myNode.append(newRow)
+
+      });
+    });
+  });
+
+   $("#pills-profile-tab").click(function(){
+    $.get("/monitoring-managment-containers/management/images", function(data, status){
+      console.log(data);
+      const myNode = document.getElementById("table-images-content");
+      while (myNode.firstChild) {
+        myNode.removeChild(myNode.lastChild);
+      }
+      $.each(data, function(i){
+        var newRow = document.createElement("tr");
+        var newCellId = document.createElement("td");
+        var newCellName = document.createElement("td");
+        var newCellAction = document.createElement("td");
+        var newButtonDelete = document.createElement("button")
+
+        newCellId.innerHTML = data[i].id;
+        newCellName.innerHTML = data[i].repoTag;
+        newRow.id = data[i].id;
+
+        newButtonDelete.classList.add('btn','btn-danger')
+        newButtonDelete.innerHTML = 'Delete'
+
+        newButtonDelete.onclick = function(event){
+            event.preventDefault();
+            let bId = data[i].id;
+            $.ajax({
+                url: '/monitoring-managment-containers/management/images/' + bId,
+                type: 'DELETE',
+                success: function(result){
+                    alert('Image deleted successfully');
+                    document.getElementById("table-images-content").removeChild(document.getElementById(data[i].id));
+                }
+            });
+        }
+
+        newRow.append(newCellId)
+        newRow.append(newCellName)
+        newCellAction.append(newButtonDelete)
+        newRow.append(newCellAction)
+
+        myNode.append(newRow)
+
+      });
+    });
+  });
+});
+</script>
+<style>
+    div{
+        margin: 20px;
+    }
+    .layout-buttons{
+        display: inline-flex;
+        justify-content: space-between;
+    }
+    .mt{
+        margin-top: -18%;
+    }
+</style>
 <body>
     <div class = "container">
         <div th:replace="fragments/nav.html :: nav('manegement')"></div>
+
+        <div>
+            <div class="m-5 layout-buttons col-12">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Container</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Imagens</a>
+                    </li>
+                </ul>
+
+                <div>
+                    <button id="btnDeleteAll" class = "mt btn btn-danger">Delete All</button>
+                </div>
+            </div>
+
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <table class="table" id="table-container">
+                        <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody id="table-container-content">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                    <table class="table" id="table-images">
+                        <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Repo Tag</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody id="table-images-content">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div th:replace="fragments/footer.html :: footer"></div>
 </body>
 </html>

@@ -6,12 +6,12 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "COL_CONTAINER", language = "english")
+@Document(collection = "COL_IMAGE", language = "english")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Container {
+public class Image {
     @Id
     private String id;
-    private String name;
+    private String repoTag;
 }
