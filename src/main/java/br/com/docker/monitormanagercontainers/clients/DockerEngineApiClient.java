@@ -1,5 +1,6 @@
 package br.com.docker.monitormanagercontainers.clients;
 
+import br.com.docker.monitormanagercontainers.clients.dtos.ContainerStatsDTO;
 import br.com.docker.monitormanagercontainers.clients.dtos.ContainersDTO;
 import br.com.docker.monitormanagercontainers.clients.dtos.ImagesDTO;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -15,13 +16,14 @@ public interface DockerEngineApiClient {
     @GetMapping("/containers/json")
     List<ContainersDTO> getContainers();
 
-    ///containers/{id}
+    @DeleteMapping("containers/{id}")
+    void deleteContainer(@PathVariable("id") String id, @RequestParam(value = "force", defaultValue = "true") boolean force);
+
+    @GetMapping("/containers/{id}/stats")
+    ContainerStatsDTO getContainerStats(@PathVariable("id") String id);
 
     @GetMapping("/images/json")
     List<ImagesDTO> getImages();
-
-    @DeleteMapping("containers/{id}")
-    void deleteContainer(@PathVariable("id") String id, @RequestParam(value = "force", defaultValue = "true") boolean force);
 
     @DeleteMapping("images/{id}")
     void deleteImage(@PathVariable("id") String id, @RequestParam(value = "force", defaultValue = "true") boolean force);
