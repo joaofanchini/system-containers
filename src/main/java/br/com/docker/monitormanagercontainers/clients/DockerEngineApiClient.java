@@ -20,7 +20,7 @@ public interface DockerEngineApiClient {
     void deleteContainer(@PathVariable("id") String id, @RequestParam(value = "force", defaultValue = "true") boolean force);
 
     @GetMapping("/containers/{id}/stats")
-    ContainerStatsDTO getContainerStats(@PathVariable("id") String id);
+    ContainerStatsDTO getContainerStats(@PathVariable("id") String id, @RequestParam("stream") Integer stats);
 
     @GetMapping("/images/json")
     List<ImagesDTO> getImages();

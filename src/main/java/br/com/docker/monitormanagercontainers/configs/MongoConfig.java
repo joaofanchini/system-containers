@@ -28,7 +28,7 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
 
     @Override
     public MongoClient mongoClient() {
-        ConnectionString connectionStringSetting = new ConnectionString("mongodb://" + username + ":" + password + "@" + host  + ":" + port + "/" + databaseName);
+        ConnectionString connectionStringSetting = new ConnectionString("mongodb://" + username + ":" + password + "@" + host  + ":" + port + "/" + databaseName + "?authSource=admin");
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(connectionStringSetting)
                 .build();

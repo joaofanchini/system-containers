@@ -1,7 +1,5 @@
 package br.com.docker.monitormanagercontainers.controllers;
 
-import br.com.docker.monitormanagercontainers.data.models.Container;
-import br.com.docker.monitormanagercontainers.data.models.Image;
 import br.com.docker.monitormanagercontainers.dto.response.ContainerResponseDTO;
 import br.com.docker.monitormanagercontainers.dto.response.ImagesResponseDTO;
 import br.com.docker.monitormanagercontainers.services.ManagementService;

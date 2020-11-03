@@ -1,8 +1,8 @@
 package br.com.docker.monitormanagercontainers.data.repositories;
 
-import br.com.docker.monitormanagercontainers.data.models.Container;
+import br.com.docker.monitormanagercontainers.data.models.ContainerMonitoringData;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ContainerRepository extends BaseRepository<Container, String> {
+public interface ContainerRepository extends BaseRepository<ContainerMonitoringData, String> {
 }
