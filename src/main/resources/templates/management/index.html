@@ -49,35 +49,6 @@ function submitFormCreate(){
 
 $(document).ready(function(){
 
-  $("form-create").submit(function(event){
-    event.preventDefault();
-
-    let containerFlag = document.getElementById('pills-home-tab');
-    let imageFlag = document.getElementById('pills-profile-tab');
-
-    if(containerFlag.classList.contains('active')){
-        let imageName = document.getElementById("inputImageName");
-        let imageId = document.getElementById("inputImageId");
-
-        if(imageName.value && imageId.value){
-            let data = {
-                'imageId': imageId
-            };
-            $.post('/monitoring-managment-containers/management/create-container?name-image='+imageName, data, function(){
-                alert('Container created successfully');
-            });
-
-        }
-
-    } else if(imageFlag.classList.contains('active')){
-
-
-
-    }
-
-
-  });
-
   $("#btnDeleteAll").click(function(event){
     event.preventDefault();
     const containerContent = document.getElementById("table-container-content");

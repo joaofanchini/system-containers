@@ -8,10 +8,29 @@
         margin: 20px;
     }
 </style>
+<script>
+
+    function loadContainerData(){
+
+    }
+
+
+
+
+</script>
 <body>
     <div class = "container">
         <div th:replace="fragments/nav.html :: nav('monitoring')"></div>
     </div>
+
+    <form class="form-inline">
+        <div class="form-group mx-sm-3 mb-2">
+            <input type="text" class="form-control" id="inputPassword2" placeholder="Container ID">
+        </div>
+        <button type="button" class="btn btn-primary mb-2" onclick="loadContainerData()">Search</button>
+    </form>
+
+
     <div th:replace="fragments/footer.html :: footer"></div>
 </body>
 </html>
