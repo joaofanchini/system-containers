@@ -253,7 +253,7 @@ $(document).ready(function(){
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Create {}</h5>
+                        <h5 class="modal-title" id="staticBackdropLabel">Create a Container</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -262,12 +262,12 @@ $(document).ready(function(){
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="inputImageName">Container Name</label>
-                                <input type="text" class="form-control" id="inputImageName" aria-describedby="image-name">
+                                <input type="text" class="form-control" id="inputImageName" aria-describedby="image-name" required>
                                 <small id="image-name" class="form-text text-muted">Name that will be given to the container. Do not put spaces in the name</small>
                             </div>
                             <div class="form-group">
                                 <label for="inputImageId">Image ID</label>
-                                <input type="text" class="form-control" id="inputImageId" aria-describedby="image-id">
+                                <input type="text" class="form-control" id="inputImageId" aria-describedby="image-id" required>
                                 <small id="image-id" class="form-text text-muted">Image ID for creating the container</small>
                             </div>
                         </div>
