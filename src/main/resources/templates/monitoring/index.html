@@ -3,16 +3,13 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 </header>
-<style>
-    div{
-        margin: 20px;
-    }
-</style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script>
 
-    function createChart(elementId,labelsArray, dataArray){
-        var ctx = document.getElementById(elementId).getContext('2d');
+    function createChart(titleChart,elementId,labelsArray, dataArray){
+        canvasElement = document.getElementById(elementId);
+        canvasElement.innerHTML = ''
+        var ctx = canvasElement.getContext('2d');
 
         let dados = {
             datasets: [{
@@ -24,8 +21,18 @@
 
         let opcoes = {
             cutoutPercentage: 40,
+            title: {
+                display: true,
+                text: titleChart,
+                fontSize: 40
+            },
             animation:{
                 duration:1
+            },
+            legend:{
+                labels:{
+                    fontSize: 30
+                }
             }
         };
 
@@ -52,37 +59,77 @@
         $.get("/monitoring-managment-containers/monitoring/stats/" + containerIdValue, function(data, status){
             console.log(data);
 
-            percentUsageInKernelMode = (data.cpuStats.cpuUsage.usageInKernelMode / data.cpuStats.cpuUsage.totalUsage) * 100;
-            percentUsageInUserMode = (data.cpuStats.cpuUsage.usageInUserMode / data.cpuStats.cpuUsage.totalUsage) * 100;
+            cpuStatusTotalUsage = data.cpuStats.cpuUsage.totalUsage;
+            preCpuTotalUsage = data.precpuStats.precpuStatsCpuUsage.totalUsage;
 
-            let dataArrayCpuUsageData = [percentUsageInKernelMode, percentUsageInUserMode];
-            let labelArrayCpuUsageData = ["Usage in Kernel Mode", "Usage in User Mode"]
+            systemCpuStatusTotalUsage = data.cpuStats.systemCpuUsage;
+            systemPreCpuTotalUsage = data.precpuStats.systemCpuUsage;
 
-            percentMemoryStats = (data.memoryStats.usage / data.memoryStats.maxUsage)*100
+            cpuDelta = Number(cpuStatusTotalUsage) - Number(preCpuTotalUsage);
+            systemCpuDelta =  Number(systemCpuStatusTotalUsage) - Number(systemPreCpuTotalUsage);
+            numberCpusOnline = data.cpuStats.onlineCpus
 
-            let dataArrayMemoryData = [percentMemoryStats,100 - percentMemoryStats]
-            let labelArrayMemoryData = ["Usage","Space Available"]
+            percentCpuUsage = (cpuDelta / systemCpuDelta) * numberCpusOnline * 100
 
-            createChart('usageCanvas',labelArrayCpuUsageData,dataArrayCpuUsageData);
-            createChart('memoryCanvas',labelArrayMemoryData,dataArrayMemoryData);
+            percentCpuUsage = Math.round(percentCpuUsage);
+
+
+            let dataArrayCpuUsageData = [percentCpuUsage, 100 - percentCpuUsage];
+            let labelArrayCpuUsageData = ["CPU Usage", "Available CPU Usage"]
+
+            totalPercentMemoryStats = data.memoryStats.limit
+            percentMemoryStats = ( (Number(data.memoryStats.usage) - Number(data.memoryStats.stats.cache)) / totalPercentMemoryStats) * 100
+            percentMemoryStats = Math.round(percentMemoryStats)
+
+
+            let dataArrayMemoryData = [percentMemoryStats, 100 - percentMemoryStats]
+            let labelArrayMemoryData = ["Used Memory","Space Available"]
+
+            createChart('CPU Usage','usageCanvas',labelArrayCpuUsageData,dataArrayCpuUsageData);
+            createChart('Memory Usage','memoryCanvas',labelArrayMemoryData,dataArrayMemoryData);
         });
     }
 
 </script>
+<style>
+    div{
+        margin: 20px;
+    }
+    .painel-canvas{
+        display: inline-flex;
+        flex-wrap: wrap;
+        border: 2px solid yellow;
+    }
+    canvas{
+        width:50% !important;
+        height:400px !important;
+        font-size: 24px !important;
+    }
+    .mt{
+        top: 10px
+    }
+    form{
+        margin-top: 60px;
+        justify-content: center;
+    }
+</style>
 <body>
     <div class = "container">
         <div th:replace="fragments/nav.html :: nav('monitoring')"></div>
-        <form class="form-inline">
-            <div class="form-group mx-sm-3 mb-2">
-                <input type="text" class="form-control" id="inputContainerId" placeholder="Container ID">
+        <div>
+            <div>
+                <form class="form-inline">
+                    <div class="form-group mx-sm-3 mb-2">
+                        <input type="text" class="form-control" id="inputContainerId" placeholder="Ex: 50d34fa5ded0e1a52493c7ef8967ab65f29e74c3dc1872442d3fed9cef4b54e4">
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="loadContainerData()">Search</button>
+                </form>
             </div>
-            <button type="button" class="btn btn-primary mb-2" onclick="loadContainerData()">Search</button>
-        </form>
-
-        <canvas id="usageCanvas" width="200" height="200"></canvas>
-        <canvas id="memoryCanvas" width="200" height="200"></canvas>
-
-
+            <div class="painel-canvas">
+                <canvas id="usageCanvas" ></canvas>
+                <canvas id="memoryCanvas"></canvas>
+            </div>
+        </div>
     </div>
     <div th:replace="fragments/footer.html :: footer"></div>
 </body>

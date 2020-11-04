@@ -13,6 +13,25 @@ public class ContainerStatsDTO {
     private CpuStats cpuStats;
     @JsonAlias({"memoryStats","memory_stats"})
     private MemoryStats memoryStats;
+    @JsonAlias("precpu_stats")
+    private PrecpuStats precpuStats;
+
+    @Data
+    @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class PrecpuStats{
+        @JsonAlias("cpu_usage")
+        private PrecpuStatsCpuUsage precpuStatsCpuUsage;
+        @JsonAlias("system_cpu_usage")
+        private String systemCpuUsage;
+    }
+    @Data
+    @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class PrecpuStatsCpuUsage{
+        @JsonAlias("total_usage")
+        private String totalUsage;
+    }
 
     @Data
     @NoArgsConstructor
@@ -22,6 +41,15 @@ public class ContainerStatsDTO {
         private String usage;
         @JsonAlias({"maxUsage","max_usage"})
         private String maxUsage;
+        private StatsMemory stats;
+        private String limit;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class StatsMemory{
+        private String cache;
     }
 
     @Data

@@ -27,37 +27,4 @@ public class ContainerMonitoringData {
     @JsonAlias({"memoryStats","memory_stats"})
     private ContainerStatsDTO.MemoryStats memoryStats;
 
-    @Data
-    @NoArgsConstructor
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class MemoryStats{
-        @JsonAlias("usage")
-        private String usage;
-        @JsonAlias({"maxUsage","max_usage"})
-        private String maxUsage;
-    }
-
-    @Data
-    @NoArgsConstructor
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class CpuStats{
-        @JsonAlias({"cpuUsage","cpu_usage"})
-        private ContainerStatsDTO.CpuStats.CpuUsage cpuUsage;
-        @JsonAlias({"systemCpuUsage","system_cpf_usage"})
-        private String systemCpuUsage;
-        @JsonAlias({"onlineCpus","online_cpus"})
-        private String onlineCpus;
-
-        @Data
-        @NoArgsConstructor
-        @JsonIgnoreProperties(ignoreUnknown = true)
-        public static class CpuUsage{
-            @JsonAlias({"totalUsage","total_usage"})
-            private String totalUsage;
-            @JsonAlias({"usageInKernelMode","usage_in_kernelmode"})
-            private String usageInKernelMode;
-            @JsonAlias({"userInUserMode","user_in_usermode"})
-            private String userInUserMode;
-        }
-    }
 }
