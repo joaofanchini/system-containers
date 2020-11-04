@@ -1,9 +1,6 @@
 package br.com.docker.monitormanagercontainers.clients;
 
-import br.com.docker.monitormanagercontainers.clients.dtos.ContainerStatsDTO;
-import br.com.docker.monitormanagercontainers.clients.dtos.ContainersDTO;
-import br.com.docker.monitormanagercontainers.clients.dtos.CreateContainerDTO;
-import br.com.docker.monitormanagercontainers.clients.dtos.ImagesDTO;
+import br.com.docker.monitormanagercontainers.clients.dtos.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +12,10 @@ public interface DockerEngineApiClient {
     List<ContainersDTO> getContainers();
 
     @PostMapping("/containers/create")
-    void createContainer(@RequestParam("name") String nameImage, @RequestBody CreateContainerDTO createContainerDTO);
+    CreateContainerResponseDTO createContainer(@RequestParam("name") String nameImage, @RequestBody CreateContainerDTO createContainerDTO);
+
+    @PostMapping("/containers/{id}/start")
+    void startContainer(@PathVariable("id") String id );
 
     @DeleteMapping("containers/{id}")
     void deleteContainer(@PathVariable("id") String id, @RequestParam(value = "force", defaultValue = "true") boolean force);

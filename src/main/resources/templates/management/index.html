@@ -8,84 +8,8 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 <script type="text/javascript">
 
-function submitFormCreate(){
-    let containerFlag = document.getElementById('pills-home-tab');
-    let imageFlag = document.getElementById('pills-profile-tab');
+function listContainers(){
 
-    if(containerFlag.classList.contains('active')){
-        let imageName = document.getElementById("inputImageName");
-        let imageId = document.getElementById("inputImageId");
-
-        if(imageName.value && imageId.value){
-            let data = {
-                imageId: imageId.value
-            };
-
-            let imageNameValue = imageName.value
-
-            $.ajax({
-                type: 'post',
-                url: '/monitoring-managment-containers/management/create-container?name-image='+imageNameValue,
-                contentType : 'application/json',
-                data: JSON.stringify(data),
-                success: function (data) {
-                    console.log('Container created successfully');
-                    console.log(data);
-                    imageName.value = ''
-                    imageId.value = ''
-                }
-            });
-
-        }
-
-    } else if(imageFlag.classList.contains('active')){
-
-
-
-    }
-    return;
-
-}
-
-$(document).ready(function(){
-
-  $("#btnDeleteAll").click(function(event){
-    event.preventDefault();
-    const containerContent = document.getElementById("table-container-content");
-    const imageContent = document.getElementById("table-images-content");
-
-    let containerFlag = document.getElementById('pills-home-tab');
-    let imageFlag = document.getElementById('pills-profile-tab');
-
-    if(containerFlag.classList.contains('active')){
-      while (containerContent.firstChild) {
-        let trId = containerContent.lastChild.id;
-        $.ajax({
-                url: '/monitoring-managment-containers/management/containers/' + trId,
-                type: 'DELETE',
-                success: function(result){
-                    console.log('Image deleted successfully:',trId);
-                }
-        });
-        containerContent.removeChild(containerContent.lastChild);
-      }
-    } else if(imageFlag.classList.contains('active')){
-      while (imageContent.firstChild) {
-        let trId = imageContent.lastChild.id;
-        $.ajax({
-                url: '/monitoring-managment-containers/management/images/' + trId,
-                type: 'DELETE',
-                success: function(result){
-                    console.log('Image deleted successfully:',trId);
-
-                }
-        });
-        imageContent.removeChild(imageContent.lastChild);
-      }
-    }
-  });
-
-  $("#pills-home-tab").click(function(){
     $.get("/monitoring-managment-containers/management/containers", function(data, status){
       console.log(data);
       const myNode = document.getElementById("table-container-content");
@@ -128,6 +52,89 @@ $(document).ready(function(){
 
       });
     });
+}
+
+function submitFormCreate(){
+    let containerFlag = document.getElementById('pills-home-tab');
+    let imageFlag = document.getElementById('pills-profile-tab');
+
+    if(containerFlag.classList.contains('active')){
+        let imageName = document.getElementById("inputImageName");
+        let imageId = document.getElementById("inputImageId");
+
+        if(imageName.value && imageId.value){
+            let data = {
+                imageId: imageId.value
+            };
+
+            let imageNameValue = imageName.value
+
+            $.ajax({
+                type: 'post',
+                url: '/monitoring-managment-containers/management/create-container?name-image='+imageNameValue,
+                contentType : 'application/json',
+                data: JSON.stringify(data),
+                success: function (data) {
+                    console.log('Container created successfully');
+                    console.log(data);
+                    imageName.value = ''
+                    imageId.value = ''
+                    listContainers();
+                }
+            });
+
+        }
+
+    } else if(imageFlag.classList.contains('active')){
+
+
+
+    }
+    return;
+
+}
+
+$(document).ready(function(){
+
+  listContainers();
+
+  $("#btnDeleteAll").click(function(event){
+    event.preventDefault();
+    const containerContent = document.getElementById("table-container-content");
+    const imageContent = document.getElementById("table-images-content");
+
+    let containerFlag = document.getElementById('pills-home-tab');
+    let imageFlag = document.getElementById('pills-profile-tab');
+
+    if(containerFlag.classList.contains('active')){
+      while (containerContent.firstChild) {
+        let trId = containerContent.lastChild.id;
+        $.ajax({
+                url: '/monitoring-managment-containers/management/containers/' + trId,
+                type: 'DELETE',
+                success: function(result){
+                    console.log('Image deleted successfully:',trId);
+                }
+        });
+        containerContent.removeChild(containerContent.lastChild);
+      }
+    } else if(imageFlag.classList.contains('active')){
+      while (imageContent.firstChild) {
+        let trId = imageContent.lastChild.id;
+        $.ajax({
+                url: '/monitoring-managment-containers/management/images/' + trId,
+                type: 'DELETE',
+                success: function(result){
+                    console.log('Image deleted successfully:',trId);
+                }
+        });
+        imageContent.removeChild(imageContent.lastChild);
+      }
+    }
+  });
+
+  $("#pills-home-tab").click(function(){
+    listContainers();
   });
 
    $("#pills-profile-tab").click(function(){
@@ -254,14 +261,14 @@ $(document).ready(function(){
                     <form id="form-create">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="inputImageName">Name image</label>
+                                <label for="inputImageName">Container Name</label>
                                 <input type="text" class="form-control" id="inputImageName" aria-describedby="image-name">
-                                <small id="image-name" class="form-text text-muted">Name to create image</small>
+                                <small id="image-name" class="form-text text-muted">Name that will be given to the container. Do not put spaces in the name</small>
                             </div>
                             <div class="form-group">
                                 <label for="inputImageId">Image ID</label>
                                 <input type="text" class="form-control" id="inputImageId" aria-describedby="image-id">
-                                <small id="image-id" class="form-text text-muted">Id of image that will be create</small>
+                                <small id="image-id" class="form-text text-muted">Image ID for creating the container</small>
                             </div>
                         </div>
                         <div class="modal-footer">

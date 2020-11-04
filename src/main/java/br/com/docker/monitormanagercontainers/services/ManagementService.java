@@ -3,6 +3,7 @@ package br.com.docker.monitormanagercontainers.services;
 import br.com.docker.monitormanagercontainers.clients.DockerEngineApiClient;
 import br.com.docker.monitormanagercontainers.clients.dtos.ContainersDTO;
 import br.com.docker.monitormanagercontainers.clients.dtos.CreateContainerDTO;
+import br.com.docker.monitormanagercontainers.clients.dtos.CreateContainerResponseDTO;
 import br.com.docker.monitormanagercontainers.clients.dtos.ImagesDTO;
 import br.com.docker.monitormanagercontainers.dto.response.ContainerResponseDTO;
 import br.com.docker.monitormanagercontainers.dto.response.ImagesResponseDTO;
@@ -41,6 +42,7 @@ public class ManagementService {
     }
 
     public void createContainer(String nameImage, CreateContainerDTO createContainerDTO) {
-        dockerEngineApiClient.createContainer(nameImage, createContainerDTO);
+        CreateContainerResponseDTO container = dockerEngineApiClient.createContainer(nameImage, createContainerDTO);
+        dockerEngineApiClient.startContainer(container.getId());
     }
 }

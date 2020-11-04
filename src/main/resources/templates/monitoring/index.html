@@ -98,7 +98,6 @@
     .painel-canvas{
         display: inline-flex;
         flex-wrap: wrap;
-        border: 2px solid yellow;
     }
     canvas{
         width:50% !important;
@@ -106,7 +105,7 @@
         font-size: 24px !important;
     }
     .mt{
-        top: 10px
+        margin-top: 10px
     }
     form{
         margin-top: 60px;
@@ -120,9 +119,9 @@
             <div>
                 <form class="form-inline">
                     <div class="form-group mx-sm-3 mb-2">
-                        <input type="text" class="form-control" id="inputContainerId" placeholder="Ex: 50d34fa5ded0e1a52493c7ef8967ab65f29e74c3dc1872442d3fed9cef4b54e4">
+                        <input type="text" class="form-control" id="inputContainerId" placeholder="Container ID">
                     </div>
-                    <button type="button" class="btn btn-primary" onclick="loadContainerData()">Search</button>
+                    <button type="button" class="mt btn btn-primary" onclick="loadContainerData()">Search</button>
                 </form>
             </div>
             <div class="painel-canvas">
