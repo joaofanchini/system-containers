@@ -8,29 +8,82 @@
         margin: 20px;
     }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script>
 
-    function loadContainerData(){
+    function createChart(elementId,labelsArray, dataArray){
+        var ctx = document.getElementById(elementId).getContext('2d');
 
+        let dados = {
+            datasets: [{
+                data: dataArray,
+                backgroundColor: ['rgb(255, 99, 132)', 'rgb(255, 199, 132)', 'rgb(55, 99, 132)']
+            }],
+            labels: labelsArray
+        };
+
+        let opcoes = {
+            cutoutPercentage: 40,
+            animation:{
+                duration:1
+            }
+        };
+
+        let meuDonutChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: dados,
+            options: opcoes
+        });
     }
 
+    function loadContainerData(){
+        let containerId = document.getElementById('inputContainerId')
 
+        if(containerId && containerId.value){
+            let containerIdValue = containerId.value;
+            callUsageData(containerIdValue);
+            setInterval(function(){
+                callUsageData(containerIdValue)
+            },5000);
+        }
+    }
 
+    function callUsageData(containerIdValue){
+        $.get("/monitoring-managment-containers/monitoring/stats/" + containerIdValue, function(data, status){
+            console.log(data);
+
+            percentUsageInKernelMode = (data.cpuStats.cpuUsage.usageInKernelMode / data.cpuStats.cpuUsage.totalUsage) * 100;
+            percentUsageInUserMode = (data.cpuStats.cpuUsage.usageInUserMode / data.cpuStats.cpuUsage.totalUsage) * 100;
+
+            let dataArrayCpuUsageData = [percentUsageInKernelMode, percentUsageInUserMode];
+            let labelArrayCpuUsageData = ["Usage in Kernel Mode", "Usage in User Mode"]
+
+            percentMemoryStats = (data.memoryStats.usage / data.memoryStats.maxUsage)*100
+
+            let dataArrayMemoryData = [percentMemoryStats,100 - percentMemoryStats]
+            let labelArrayMemoryData = ["Usage","Space Available"]
+
+            createChart('usageCanvas',labelArrayCpuUsageData,dataArrayCpuUsageData);
+            createChart('memoryCanvas',labelArrayMemoryData,dataArrayMemoryData);
+        });
+    }
 
 </script>
 <body>
     <div class = "container">
         <div th:replace="fragments/nav.html :: nav('monitoring')"></div>
+        <form class="form-inline">
+            <div class="form-group mx-sm-3 mb-2">
+                <input type="text" class="form-control" id="inputContainerId" placeholder="Container ID">
+            </div>
+            <button type="button" class="btn btn-primary mb-2" onclick="loadContainerData()">Search</button>
+        </form>
+
+        <canvas id="usageCanvas" width="200" height="200"></canvas>
+        <canvas id="memoryCanvas" width="200" height="200"></canvas>
+
+
     </div>
-
-    <form class="form-inline">
-        <div class="form-group mx-sm-3 mb-2">
-            <input type="text" class="form-control" id="inputPassword2" placeholder="Container ID">
-        </div>
-        <button type="button" class="btn btn-primary mb-2" onclick="loadContainerData()">Search</button>
-    </form>
-
-
     <div th:replace="fragments/footer.html :: footer"></div>
 </body>
 </html>

@@ -30,7 +30,7 @@ public class ContainerStatsDTO {
     public static class CpuStats{
         @JsonAlias({"cpuUsage","cpu_usage"})
         private CpuUsage cpuUsage;
-        @JsonAlias({"systemCpuUsage","system_cpf_usage"})
+        @JsonAlias({"systemCpuUsage","system_cpu_usage"})
         private String systemCpuUsage;
         @JsonAlias({"onlineCpus","online_cpus"})
         private String onlineCpus;
@@ -43,8 +43,8 @@ public class ContainerStatsDTO {
             private String totalUsage;
             @JsonAlias({"usageInKernelMode","usage_in_kernelmode"})
             private String usageInKernelMode;
-            @JsonAlias({"userInUserMode","user_in_usermode"})
-            private String userInUserMode;
+            @JsonAlias({"userInUserMode","usage_in_usermode"})
+            private String usageInUserMode;
         }
     }
 }
