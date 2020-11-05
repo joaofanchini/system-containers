@@ -8,7 +8,7 @@ The following was discovered as part of building this project:
 ## Configuration
 
 * Open the `application.yml` file and indicate the settings about the Docker Engine API and the connection to MongoDB
-* Required to have `java 11` sdk and `maven` configured in your environment
+* Required to have `java 11` and `maven` configured in your environment
 
 ## Run
 
